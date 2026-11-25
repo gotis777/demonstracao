@@ -32,24 +32,54 @@
   <meta name="description" content="Conserto de eletrodomésticos em [CIDADE]: geladeira, máquina de lavar, micro-ondas, fogão, ar-condicionado e tanquinho. Compramos seu usado e vendemos seminovos com garantia. Orçamento sem compromisso pelo WhatsApp.">
 
   <!-- Cor da barra do navegador no celular (Android) -->
-  <meta name="theme-color" content="#0b2545">
+  <meta name="theme-color" content="#0b1f4d">
+
+  <!-- Fonte Manrope (gratuita, do Google Fonts). Se não carregar, o site usa a fonte do celular. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ===============================================================
        CORES E MEDIDAS GERAIS
-       Mude aqui para alterar as cores do site inteiro.
+       Os valores seguem o arquivo DESIGN.md. Mude aqui para alterar
+       as cores do site inteiro.
        =============================================================== */
     :root {
-      --azul: #0b2545;        /* azul escuro principal */
-      --azul-medio: #13315c;  /* azul um pouco mais claro */
-      --laranja: #f28c28;     /* laranja dos detalhes */
-      --laranja-escuro: #d9731a;
-      --verde-whats: #1fa855; /* verde do WhatsApp */
-      --fundo: #f5f7fa;       /* fundo cinza bem claro */
-      --texto: #1c2733;       /* cor do texto */
-      --texto-suave: #4a5868;
-      --borda: #dde3ea;
-      --raio: 14px;           /* arredondamento dos cantos */
+      /* Azul da marca: links, botões secundários e pequenos destaques */
+      --azul: #024ad8;
+      --azul-vivo: #296ef9;     /* só sobre o marinho, em texto grande */
+      --azul-profundo: #0e3191;
+      --azul-suave: #c9e0fc;
+
+      /* Verde do WhatsApp: SÓ nos botões que abrem o WhatsApp */
+      --whats: #25D366;
+      --whats-pressionado: #1ebe5a;
+      --texto-whats: #0b2414;   /* texto escuro: branco no verde fica ilegível */
+
+      /* Fundos */
+      --marinho: #0b1f4d;       /* topo, faixa de motivos e rodapé */
+      --branco: #ffffff;
+      --nuvem: #f7f7f7;         /* faixas alternadas */
+      --nevoa: #e8e8e8;         /* espaço do mapa */
+
+      /* Textos e bordas */
+      --tinta: #1a1a1a;         /* texto principal */
+      --carvao: #3d3d3d;        /* texto de apoio */
+      --grafite: #636363;       /* letras miúdas */
+      --linha: #e8e8e8;         /* borda fina dos cards */
+
+      /* Cantos arredondados */
+      --canto-botao: 14px;
+      --canto-card: 20px;
+      --canto-grande: 28px;
+
+      /* Sombras */
+      --sombra-leve: 0 2px 8px rgba(26, 26, 26, .08);
+      --sombra-flutuante: 0 8px 24px rgba(26, 26, 26, .16);
+
+      /* Fonte única do site, com reservas caso não carregue */
+      --fonte: "Manrope", Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
     /* ===============================================================
@@ -61,16 +91,16 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: 18px;        /* fonte grande para facilitar a leitura */
-      line-height: 1.6;
-      color: var(--texto);
-      background: var(--fundo);
+      font-family: var(--fonte);
+      font-size: 17px;          /* nunca menor que isso no celular */
+      line-height: 1.55;
+      color: var(--tinta);
+      background: var(--branco);
     }
 
     img, svg { display: block; max-width: 100%; }
 
-    a { color: inherit; }
+    a { color: var(--azul); }
 
     /* Largura máxima do conteúdo em telas grandes */
     .container {
@@ -80,32 +110,23 @@
       padding: 0 20px;
     }
 
-    /* Cada seção do site tem o mesmo espaçamento */
-    section { padding: 56px 0; }
+    /* Espaço generoso entre as seções */
+    section { padding: 64px 0; }
 
-    /* Títulos das seções, com um tracinho laranja embaixo */
+    /* Títulos das seções: peso médio, firmes sem "gritar" */
     .titulo-secao {
-      font-size: 1.6rem;
-      line-height: 1.25;
-      color: var(--azul);
-      margin-bottom: 8px;
-    }
-    .titulo-secao::after {
-      content: "";
-      display: block;
-      width: 56px;
-      height: 4px;
-      background: var(--laranja);
-      border-radius: 2px;
-      margin-top: 12px;
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--tinta);
     }
     .subtitulo-secao {
-      color: var(--texto-suave);
-      margin: 16px 0 28px;
+      color: var(--carvao);
+      margin: 12px 0 32px;
     }
 
-    /* Seções com fundo branco, para alternar com o cinza */
-    .fundo-branco { background: #fff; }
+    /* Faixas cinza-claro para alternar com o branco */
+    .fundo-nuvem { background: var(--nuvem); }
 
     /* ===============================================================
        BOTÕES
@@ -115,92 +136,90 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      min-height: 56px;          /* altura boa para o dedo no celular */
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 1.1rem;
-      font-weight: 700;
+      font-family: var(--fonte);
       text-decoration: none;
       transition: transform .15s ease, background .15s ease;
     }
     .botao:active { transform: scale(.97); }
-
-    .botao-whats {
-      background: var(--verde-whats);
-      color: #fff;
-      width: 100%;               /* no celular ocupa a largura toda */
-      box-shadow: 0 6px 18px rgba(31, 168, 85, .35);
-    }
-    .botao-whats:hover { background: #18914a; }
-
-    .botao-laranja {
-      background: var(--laranja);
-      color: var(--azul);
-    }
-    .botao-laranja:hover { background: var(--laranja-escuro); }
-
     .botao svg { width: 26px; height: 26px; flex-shrink: 0; }
+
+    /* Botão do WhatsApp: verde, formato pílula, texto ESCURO */
+    .botao-whats {
+      background: var(--whats);
+      color: var(--texto-whats);
+      border-radius: 9999px;
+      min-height: 60px;
+      padding: 16px 32px;
+      font-size: 18px;
+      font-weight: 700;
+      width: 100%;              /* no celular ocupa a largura toda */
+    }
+    .botao-whats:hover,
+    .botao-whats:active { background: var(--whats-pressionado); }
 
     /* ===============================================================
        1. TOPO (cabeçalho com nome e slogan)
        =============================================================== */
     .topo {
-      background: linear-gradient(160deg, var(--azul) 0%, var(--azul-medio) 100%);
+      background: var(--marinho);
       color: #fff;
-      padding: 28px 0 40px;
+      padding: 32px 0 88px;     /* espaço embaixo para o card do WhatsApp */
     }
 
-    /* Barra com o nome da loja */
+    /* Nome da loja */
     .marca {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: .3px;
+      font-size: 20px;
+      font-weight: 700;
     }
-    /* Quadradinho laranja com uma chave inglesa, no lugar de um logo */
+    /* Círculo azul com uma chave inglesa, no lugar de um logo */
     .marca-icone {
       width: 44px;
       height: 44px;
-      border-radius: 12px;
-      background: var(--laranja);
+      border-radius: 9999px;
+      background: var(--azul);
+      color: #fff;
       display: grid;
       place-items: center;
       flex-shrink: 0;
     }
-    .marca-icone svg { width: 26px; height: 26px; }
+    .marca-icone svg { width: 24px; height: 24px; }
 
     .topo h1 {
-      font-size: 2rem;
-      line-height: 1.2;
-      margin: 36px 0 14px;
+      /* 40px, diminuindo em telas bem estreitas para não estourar */
+      font-size: clamp(30px, 9vw, 40px);
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 40px 0 16px;
+      overflow-wrap: break-word;
     }
-    .topo h1 span { color: var(--laranja); }
+    .topo h1 span { color: var(--azul-vivo); }
 
     .topo p {
-      color: #c9d6e8;
-      font-size: 1.05rem;
+      color: #c9d3e6;
+      font-size: 19px;
     }
 
     /* ===============================================================
-       2. CHAMADA PARA O WHATSAPP
+       2. CHAMADA PARA O WHATSAPP (card branco sobre o topo)
        =============================================================== */
     .chamada {
       padding: 0;
-      margin-top: -28px;          /* "sobe" um pouco em cima do topo */
+      margin-top: -56px;        /* "sobe" em cima do topo */
     }
     .chamada-caixa {
-      background: #fff;
-      border-radius: var(--raio);
-      padding: 24px 20px;
-      box-shadow: 0 10px 30px rgba(11, 37, 69, .12);
+      background: var(--branco);
+      border-radius: var(--canto-grande);
+      padding: 28px 20px;
+      box-shadow: var(--sombra-flutuante);
       text-align: center;
     }
     .chamada-caixa p {
-      color: var(--texto-suave);
-      font-size: .95rem;
-      margin-top: 12px;
+      color: var(--carvao);
+      font-size: 15px;
+      margin-top: 14px;
     }
 
     /* ===============================================================
@@ -211,22 +230,22 @@
       gap: 16px;
     }
     .card-servico {
-      background: #fff;
-      border: 1px solid var(--borda);
-      border-left: 6px solid var(--laranja);
-      border-radius: var(--raio);
-      padding: 22px 20px;
+      background: var(--branco);
+      border: 1px solid var(--linha);
+      border-radius: var(--canto-card);
+      padding: 28px;
     }
     .card-servico h3 {
-      color: var(--azul);
-      font-size: 1.2rem;
-      margin-bottom: 6px;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .card-servico h3 svg { width: 28px; height: 28px; color: var(--laranja); }
-    .card-servico p { color: var(--texto-suave); }
+    .card-servico h3 svg { width: 28px; height: 28px; color: var(--azul); flex-shrink: 0; }
+    .card-servico p { color: var(--carvao); }
 
     /* ===============================================================
        4. APARELHOS QUE CONSERTAMOS (grade de ícones)
@@ -234,23 +253,20 @@
     .grade-aparelhos {
       display: grid;
       grid-template-columns: repeat(2, 1fr);  /* 2 colunas no celular */
-      gap: 14px;
+      gap: 16px;
     }
     .aparelho {
-      background: var(--fundo);
-      border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      padding: 22px 10px;
+      background: var(--branco);
+      border-radius: var(--canto-card);
+      padding: 24px 12px;
       text-align: center;
-      font-weight: 700;
-      color: var(--azul);
-      font-size: 1rem;
+      font-weight: 600;
     }
     .aparelho svg {
       width: 52px;
       height: 52px;
-      margin: 0 auto 10px;
-      color: var(--azul);
+      margin: 0 auto 12px;
+      color: var(--tinta);
     }
 
     /* ===============================================================
@@ -265,115 +281,120 @@
       display: flex;
       gap: 16px;
       align-items: flex-start;
-      background: #fff;
-      border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      padding: 20px;
+      background: var(--branco);
+      border: 1px solid var(--linha);
+      border-radius: var(--canto-card);
+      padding: 24px;
     }
     .passo-numero {
       flex-shrink: 0;
       width: 48px;
       height: 48px;
-      border-radius: 50%;
-      background: var(--azul);
-      color: var(--laranja);
-      font-size: 1.4rem;
-      font-weight: 800;
+      border-radius: 9999px;
+      background: var(--azul-suave);
+      color: var(--azul-profundo);
+      font-size: 21px;
+      font-weight: 600;
       display: grid;
       place-items: center;
     }
-    .passo h3 { color: var(--azul); font-size: 1.15rem; }
-    .passo p { color: var(--texto-suave); font-size: 1rem; }
+    .passo h3 { font-size: 21px; font-weight: 600; line-height: 1.25; margin-bottom: 4px; }
+    .passo p { color: var(--carvao); }
 
     /* ===============================================================
-       6. POR QUE ESCOLHER A GENTE
+       6. POR QUE ESCOLHER A GENTE (faixa azul-marinho)
        =============================================================== */
     .motivos {
-      background: var(--azul);
+      background: var(--marinho);
       color: #fff;
     }
     .motivos .titulo-secao { color: #fff; }
     .grade-motivos {
       display: grid;
       gap: 16px;
-      margin-top: 28px;
+      margin-top: 32px;
     }
     .motivo {
-      background: rgba(255, 255, 255, .07);
-      border: 1px solid rgba(255, 255, 255, .15);
-      border-radius: var(--raio);
-      padding: 22px 20px;
+      background: rgba(255, 255, 255, .06);
+      border-radius: var(--canto-card);
+      padding: 24px;
     }
     .motivo strong {
       display: block;
-      font-size: 1.6rem;
-      color: var(--laranja);
+      font-size: 26px;          /* texto grande: o azul vivo pode ser usado */
+      font-weight: 600;
+      color: var(--azul-vivo);
       line-height: 1.2;
       margin-bottom: 4px;
     }
-    .motivo span { color: #c9d6e8; }
+    .motivo span { color: #dbe3f1; }
 
     /* ===============================================================
        7. SEMINOVOS À VENDA (cards de produto)
        =============================================================== */
     .grade-produtos {
       display: grid;
-      gap: 18px;
+      gap: 16px;
     }
     .produto {
-      background: #fff;
-      border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      overflow: hidden;
+      background: var(--branco);
+      border-radius: var(--canto-card);
+      box-shadow: var(--sombra-leve);
+      padding: 12px;            /* a foto fica "dentro" do card */
       display: flex;
       flex-direction: column;
     }
     /* Espaço para a foto do produto */
     .produto-foto {
       aspect-ratio: 4 / 3;
-      background: #e8edf3;
+      background: var(--nuvem);
+      border-radius: var(--canto-botao);
+      overflow: hidden;
       display: grid;
       place-items: center;
-      color: #8a99ab;
-      font-size: .95rem;
+      color: var(--grafite);
+      font-size: 15px;
     }
     .produto-foto img { width: 100%; height: 100%; object-fit: cover; }
     .produto-info {
-      padding: 18px 20px 22px;
+      padding: 16px 8px 8px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       flex: 1;
     }
+    /* Selo "Com garantia" */
     .produto-selo {
       align-self: flex-start;
-      background: #fff3e6;
-      color: var(--laranja-escuro);
-      font-size: .8rem;
+      background: var(--azul-suave);
+      color: var(--azul-profundo);
+      font-size: 14px;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
+      line-height: 1.3;
+      padding: 4px 12px;
+      border-radius: 9999px;
     }
-    .produto h3 { color: var(--azul); font-size: 1.15rem; }
+    .produto h3 { font-size: 21px; font-weight: 600; line-height: 1.25; }
     .produto-preco {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--azul);
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 8px;
     }
-    .produto .botao { margin-top: auto; width: 100%; min-height: 52px; font-size: 1rem; }
+    .produto .botao { margin-top: auto; }
 
     /* ===============================================================
        8. AVALIAÇÕES ("Em breve")
        =============================================================== */
     .em-breve {
-      background: #fff;
-      border: 2px dashed var(--borda);
-      border-radius: var(--raio);
-      padding: 36px 20px;
+      background: var(--nuvem);
+      border-radius: var(--canto-card);
+      padding: 40px 24px;
+      margin-top: 32px;
       text-align: center;
-      color: var(--texto-suave);
-      font-size: 1.2rem;
-      font-weight: 700;
+      color: var(--grafite);
+      font-size: 21px;
+      font-weight: 600;
     }
 
     /* ===============================================================
@@ -381,35 +402,34 @@
        =============================================================== */
     .grade-local {
       display: grid;
-      gap: 20px;
+      gap: 16px;
     }
     .info-local {
       list-style: none;
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
     .info-local li {
       display: flex;
       gap: 14px;
       align-items: flex-start;
-      background: #fff;
-      border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      padding: 18px;
+      background: var(--branco);
+      border: 1px solid var(--linha);
+      border-radius: var(--canto-botao);
+      padding: 20px;
     }
-    .info-local svg { width: 28px; height: 28px; color: var(--laranja); flex-shrink: 0; margin-top: 2px; }
-    .info-local strong { display: block; color: var(--azul); }
+    .info-local svg { width: 28px; height: 28px; color: var(--azul); flex-shrink: 0; margin-top: 2px; }
+    .info-local strong { display: block; font-weight: 600; }
 
     /* Caixa onde o mapa do Google vai entrar */
     .mapa {
       min-height: 280px;
-      border-radius: var(--raio);
+      border-radius: var(--canto-card);
       overflow: hidden;
-      background: #e8edf3;
-      border: 1px solid var(--borda);
+      background: var(--nevoa);
       display: grid;
       place-items: center;
-      color: #8a99ab;
+      color: var(--grafite);
       text-align: center;
       padding: 20px;
     }
@@ -419,15 +439,15 @@
        10. RODAPÉ
        =============================================================== */
     .rodape {
-      background: var(--azul);
-      color: #c9d6e8;
-      padding: 40px 0 110px;     /* espaço extra embaixo para o botão flutuante */
+      background: var(--marinho);
+      color: #dbe3f1;
+      padding: 48px 0 112px;    /* espaço extra embaixo para o botão flutuante */
       text-align: center;
-      font-size: 1rem;
+      font-size: 15px;
     }
-    .rodape strong { color: #fff; font-size: 1.2rem; display: block; margin-bottom: 6px; }
-    .rodape a { color: var(--laranja); font-weight: 700; text-decoration: none; }
-    .rodape small { display: block; margin-top: 18px; color: #8ea3bd; font-size: .85rem; }
+    .rodape strong { color: #fff; font-size: 21px; font-weight: 600; display: block; margin-bottom: 8px; }
+    .rodape a { color: #fff; font-weight: 700; }
+    .rodape small { display: block; margin-top: 20px; color: #a9b6cf; font-size: 15px; }
 
     /* ===============================================================
        BOTÃO FLUTUANTE DO WHATSAPP (canto inferior direito)
@@ -438,12 +458,12 @@
       bottom: 18px;
       width: 64px;
       height: 64px;
-      border-radius: 50%;
-      background: var(--verde-whats);
-      color: #fff;
+      border-radius: 9999px;
+      background: var(--whats);
+      color: var(--texto-whats);
       display: grid;
       place-items: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+      box-shadow: var(--sombra-flutuante);
       z-index: 100;
       transition: transform .15s ease;
     }
@@ -452,7 +472,7 @@
 
     /* Contorno visível ao navegar pelo teclado (acessibilidade) */
     a:focus-visible {
-      outline: 3px solid var(--laranja);
+      outline: 3px solid var(--azul-vivo);
       outline-offset: 3px;
     }
 
@@ -461,36 +481,35 @@
        Tudo acima vale para celular; aqui só melhoramos para telas largas.
        =============================================================== */
     @media (min-width: 700px) {
-      body { font-size: 18px; }
-      section { padding: 72px 0; }
-      .titulo-secao { font-size: 2rem; }
+      .titulo-secao { font-size: 32px; line-height: 1.15; }
 
-      .topo { padding: 32px 0 64px; }
-      .topo h1 { font-size: 2.6rem; max-width: 760px; }
+      .topo { padding: 40px 0 104px; }
+      .topo h1 { max-width: 760px; }
 
-      .botao-whats { width: auto; padding: 16px 40px; }
-      .chamada-caixa { padding: 32px; }
+      .botao-whats { width: auto; }
+      .produto .botao-whats { width: 100%; }
+      .chamada-caixa { padding: 36px; }
 
       .grade-servicos,
       .grade-motivos,
-      .grade-produtos { grid-template-columns: repeat(3, 1fr); }
+      .grade-produtos { grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
-      .grade-aparelhos { grid-template-columns: repeat(3, 1fr); }
+      .grade-aparelhos { grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
-      .passos { grid-template-columns: repeat(3, 1fr); }
+      .passos { grid-template-columns: repeat(3, 1fr); gap: 24px; }
       .passo { flex-direction: column; }
-
-      .grade-local { grid-template-columns: 1fr 1.3fr; }
-      .mapa, .mapa iframe { min-height: 100%; }
 
       .rodape { padding-bottom: 48px; }
     }
 
     @media (min-width: 1000px) {
+      section { padding: 88px 0; }
       .grade-aparelhos { grid-template-columns: repeat(6, 1fr); }
+      .grade-local { grid-template-columns: 1fr 1.3fr; gap: 24px; }
+      .mapa, .mapa iframe { min-height: 100%; }
     }
 
-    /* Respeita quem prefere menos animação no celular/computador */
+    /* Respeita quem prefere menos animação */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       * { transition: none !important; }
@@ -562,7 +581,7 @@
     <div class="container">
       <div class="marca">
         <div class="marca-icone" aria-hidden="true">
-          <svg style="color:#0b2545"><use href="#i-chave"/></svg>
+          <svg><use href="#i-chave"/></svg>
         </div>
         [NOME DA LOJA]
       </div>
@@ -630,7 +649,7 @@
          4. APARELHOS QUE CONSERTAMOS (grade com ícones)
          Para adicionar um aparelho, copie um bloco <div class="aparelho">.
          ============================================================ -->
-    <section id="aparelhos" class="fundo-branco">
+    <section id="aparelhos" class="fundo-nuvem">
       <div class="container">
         <h2 class="titulo-secao">Aparelhos que consertamos</h2>
         <p class="subtitulo-secao">Trabalhamos com as principais linhas de eletrodomésticos.</p>
@@ -713,7 +732,7 @@
          <img src="nome-da-foto.jpg" alt="Descrição do aparelho">
          Para adicionar mais produtos, copie um bloco <article class="produto">.
          ============================================================ -->
-    <section id="seminovos" class="fundo-branco">
+    <section id="seminovos" class="fundo-nuvem">
       <div class="container">
         <h2 class="titulo-secao">Seminovos à venda</h2>
         <p class="subtitulo-secao">Revisados, testados e com garantia. Consulte disponibilidade.</p>
@@ -727,9 +746,12 @@
               <span class="produto-selo">Com garantia</span>
               <h3>[PRODUTO]</h3>
               <span class="produto-preco">[PREÇO]</span>
-              <a class="botao botao-laranja link-whats"
+              <a class="botao botao-whats link-whats"
                  href="https://wa.me/55[WHATSAPP]?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento."
-                 target="_blank" rel="noopener">Tenho interesse</a>
+                 target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-whats"/></svg>
+                Tenho interesse
+              </a>
             </div>
           </article>
 
@@ -740,9 +762,12 @@
               <span class="produto-selo">Com garantia</span>
               <h3>[PRODUTO]</h3>
               <span class="produto-preco">[PREÇO]</span>
-              <a class="botao botao-laranja link-whats"
+              <a class="botao botao-whats link-whats"
                  href="https://wa.me/55[WHATSAPP]?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento."
-                 target="_blank" rel="noopener">Tenho interesse</a>
+                 target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-whats"/></svg>
+                Tenho interesse
+              </a>
             </div>
           </article>
 
@@ -753,9 +778,12 @@
               <span class="produto-selo">Com garantia</span>
               <h3>[PRODUTO]</h3>
               <span class="produto-preco">[PREÇO]</span>
-              <a class="botao botao-laranja link-whats"
+              <a class="botao botao-whats link-whats"
                  href="https://wa.me/55[WHATSAPP]?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento."
-                 target="_blank" rel="noopener">Tenho interesse</a>
+                 target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-whats"/></svg>
+                Tenho interesse
+              </a>
             </div>
           </article>
 
@@ -772,7 +800,7 @@
     <section id="avaliacoes">
       <div class="container">
         <h2 class="titulo-secao">Avaliações</h2>
-        <div class="em-breve" style="margin-top:28px">Em breve</div>
+        <div class="em-breve">Em breve</div>
       </div>
     </section>
 
@@ -780,7 +808,7 @@
     <!-- ============================================================
          9. ENDEREÇO, HORÁRIO E MAPA
          ============================================================ -->
-    <section id="localizacao" class="fundo-branco">
+    <section id="localizacao" class="fundo-nuvem">
       <div class="container">
         <h2 class="titulo-secao">Onde estamos</h2>
         <p class="subtitulo-secao">Venha nos visitar ou chame no WhatsApp.</p>
@@ -802,7 +830,7 @@
               </div>
             </li>
             <li>
-              <svg aria-hidden="true" style="color:#1fa855"><use href="#i-whats"/></svg>
+              <svg aria-hidden="true"><use href="#i-whats"/></svg>
               <div>
                 <strong>WhatsApp</strong>
                 <a class="link-whats"
